@@ -9,8 +9,7 @@ Welcome to **YiNiann's Navigation App**, a simple navigation web app that allows
 - **Dynamic Cards**: Users can view and add custom cards with a title, description, URL, and button text.
 - **React Router**: Simple routing for navigating between Home, About, and Contact pages.
 - **Redux**: Manages dark mode state globally.
-- **Tailwind CSS**: A utility-first CSS framework for styling.
-- **LocalStorage**: To persist dark mode preference across sessions.
+
 
 ## Technologies Used
 
@@ -69,19 +68,21 @@ The build folder will contain the optimized production build, ready for deployme
 ```
 ├── src
 │   ├── components
-│   │   └── DarkModeToggle.jsx       # Dark mode toggle button component
-│   ├── stores
-│   │   └── DarkModeContext.js      # Context to manage dark mode state
-│   ├── Home.jsx                    # Home page with cards
-│   ├── About.jsx                   # About page
-│   ├── Contact.jsx                 # Contact page
-│   ├── App.jsx                     # Main app component with routing
-│   ├── index.css                   # Global CSS
-│   └── index.js                    # Entry point to render the app
-├── package.json                    # Project dependencies and scripts
-├── README.md                       # This file
-└── public
-    └── index.html                  # HTML template
+│   │   ├── DarkModeToggle.jsx  # Dark mode toggle button
+│   ├── pages
+│   │   ├── Home.jsx   # Home page with card management
+│   │   ├── About.jsx  # About page
+│   │   ├── Contact.jsx  # Contact page
+│   ├── store
+│   │   ├── darkModeSlice.js  # Redux slice for dark mode
+│   │   ├── cardSlice.js  # Redux slice for card management
+│   │   ├── store.js  # Redux store configuration
+│   ├── App.jsx  # Main application component
+│   ├── main.jsx  # Application entry point
+│   ├── index.css  # Global styles
+├── public
+│   ├── index.html  # HTML template
+├── package.json  # Dependencies and scripts
 ```
 
 ## Contributing
