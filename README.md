@@ -73,10 +73,10 @@ The build folder will contain the optimized production build, ready for deployme
 │   │   ├── Home.jsx   # Home page with card management
 │   │   ├── About.jsx  # About page
 │   │   ├── Contact.jsx  # Contact page
-│   ├── store
+│   ├── stores
 │   │   ├── darkModeSlice.js  # Redux slice for dark mode
 │   │   ├── cardSlice.js  # Redux slice for card management
-│   │   ├── store.js  # Redux store configuration
+│   │   ├── index.js  # Redux store configuration
 │   ├── App.jsx  # Main application component
 │   ├── main.jsx  # Application entry point
 │   ├── index.css  # Global styles
