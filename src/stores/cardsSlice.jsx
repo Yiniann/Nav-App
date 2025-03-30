@@ -1,23 +1,37 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
-const initialState = [
-  { title: "Blog", description: "YiNiann's Site", url: "https://en1an.com", buttonText: "Go to Blog 📖" },
-  { title: "Shuttle", description: "Network service", url: "https://shuttle.en1an.com", buttonText: "Shuttle 🚀" },
-  { title: "Tg", description: "Contact Me", url: "https://t.me/y1niannn", buttonText: "Telegram 📬 ", isNewTab: true },
-  { title: "Image Host", description: "Picture Management", url: "https://img.en1an.com", buttonText: "Lsky 🖼️", isNewTab: true },
-  { title: "Ai", description: "On-Device LLM", url: "https://ai.en1an.com", buttonText: "Open-Web UI 💻", isNewTab: true },
-  { title: "Mcsm", description: "Game Control Panel", url: "https://mcsm.en1an.com", buttonText: "MCSM Panel 🎮", isNewTab: true },
-];
+
+const API_URL = "http://localhost:3001/cards"
+
+
+export const fetchCards = createAsyncThunk("cards/fetchCards", async () => {
+  const response = await fetch(API_URL)
+  return response.json()
+})
+
+// 添加卡片
+export const addCard = createAsyncThunk("cards/addCard", async (newCard) => {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newCard),
+  })
+  return response.json()
+})
 
 const cardsSlice = createSlice({
   name: "cards",
-  initialState,
-  reducers: {
-    addCard: (state, action) => {
-      state.push(action.payload);
-    },
+  initialState: [],
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCards.fulfilled, (state, action) => {
+        return action.payload
+      })
+      .addCase(addCard.fulfilled, (state, action) => {
+        state.push(action.payload)
+      })
   },
-});
+})
 
-export const { addCard } = cardsSlice.actions;
-export default cardsSlice.reducer;
+export default cardsSlice.reducer

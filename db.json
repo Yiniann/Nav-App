@@ -1,0 +1,50 @@
+{
+  "cards": [
+    {
+      "id": "1",
+      "title": "Blog",
+      "description": "YiNiann's Site",
+      "url": "https://en1an.com",
+      "buttonText": "Go to Blog 📖"
+    },
+    {
+      "id": "2",
+      "title": "Shuttle",
+      "description": "Network service",
+      "url": "https://shuttle.en1an.com",
+      "buttonText": "Shuttle 🚀"
+    },
+    {
+      "id": "3",
+      "title": "Tg",
+      "description": "Contact Me",
+      "url": "https://t.me/y1niannn",
+      "buttonText": "Telegram 📬",
+      "isNewTab": true
+    },
+    {
+      "id": "4",
+      "title": "Image Host",
+      "description": "Picture Management",
+      "url": "https://img.en1an.com",
+      "buttonText": "Lsky 🖼️",
+      "isNewTab": true
+    },
+    {
+      "id": "5",
+      "title": "Ai",
+      "description": "On-Device LLM",
+      "url": "https://ai.en1an.com",
+      "buttonText": "Open-Web UI 💻",
+      "isNewTab": true
+    },
+    {
+      "id": "6",
+      "title": "Mcsm",
+      "description": "Game Control Panel",
+      "url": "https://mcsm.en1an.com",
+      "buttonText": "MCSM Panel 🎮",
+      "isNewTab": true
+    }
+  ]
+}

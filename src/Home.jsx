@@ -1,38 +1,47 @@
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { addCard } from "./stores/cardsSlice";
-import useField from "./hooks/useField";
+import { useState, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { fetchCards, addCard } from "./stores/cardsSlice"
+import useField from "./hooks/useField"
 
 const Home = () => {
-  const cards = useSelector((state) => state.cards);
-  const dispatch = useDispatch();
-  const [isAdding, setIsAdding] = useState(false);
+  const cards = useSelector((state) => state.cards || [])
+  const dispatch = useDispatch()
+  //db中获取卡片数据
+  useEffect(() => {
+    dispatch(fetchCards())
+  }, [dispatch])
 
-  const title = useField("text");
-  const description = useField("text");
-  const url = useField("url");
-  const buttonText = useField("text");
+  const [isAdding, setIsAdding] = useState(false)
 
-  const handleAddCard = () => {
+  const title = useField("text")
+  const description = useField("text")
+  const url = useField("url")
+  const buttonText = useField("text")
+  //创建新卡片
+  const handleAddCard = async () => {
     if (!title.fieldProps.value || !description.fieldProps.value || !url.fieldProps.value || !buttonText.fieldProps.value) {
-      alert("请填写所有字段！");
-      return;
+      alert("请填写所有字段！")
+      return
     }
 
-    dispatch(addCard({
+    const newCard = {
       title: title.fieldProps.value,
       description: description.fieldProps.value,
       url: url.fieldProps.value,
       buttonText: buttonText.fieldProps.value,
       isNewTab: true,
-    }));
+    }
 
-    title.reset();
-    description.reset();
-    url.reset();
-    buttonText.reset();
-    setIsAdding(false);
-  };
+    
+    await dispatch(addCard(newCard))
+    dispatch(fetchCards())
+
+    title.reset()
+    description.reset()
+    url.reset()
+    buttonText.reset()
+    setIsAdding(false)
+  }
 
   return (
     <div className="text-center text-2xl flex flex-col items-center">
@@ -71,7 +80,7 @@ const Home = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
