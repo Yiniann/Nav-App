@@ -3,7 +3,7 @@ import { toggleDarkMode } from "../stores/darkModeSlice";
 
 const DarkModeToggle = () => {
   const dispatch = useDispatch();
-  const darkMode = useSelector((state) => state.darkMode.darkMode);
+  const darkMode = useSelector((state) => state.darkMode);
 
   return (
     <button
@@ -15,4 +15,4 @@ const DarkModeToggle = () => {
   );
 };
 
-export default DarkModeToggle;
+export default DarkModeToggle;  
