@@ -33,8 +33,8 @@ Before running the app, make sure you have the following installed:
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/yourusername/yi-niann-nav.git
-   cd yi-niann-nav
+   git clone https://github.com/Yiniann/Nav-App.git
+   cd Nav-App
    ```
 
 2. Install dependencies:
