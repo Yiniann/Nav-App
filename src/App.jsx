@@ -5,9 +5,15 @@ import About from "./About"
 import Contact from "./Contact"
 import DarkModeToggle from "./components/DarkModeToggle"
 import Toast from "./components/Toast"
+import { useState } from "react"
 
 export default function App() {
-  const darkMode = useSelector((state) => state.darkMode);
+  const darkMode = useSelector((state) => state.darkMode) //明暗状态
+  const [isDragDeleteEnabled, setIsDragDeleteEnabled] = useState(false)//sort状态
+
+  const toggleDragDelete = () => {
+    setIsDragDeleteEnabled(!isDragDeleteEnabled); //切换sort事件处理
+  }
 
   return (
     <Router>
@@ -33,11 +39,19 @@ export default function App() {
               <Link to="/about" className="text-white font-mono hover:underline">About</Link>
               <Link to="/contact" className="text-white font-mono hover:underline">Contact</Link>
             </div>
+
+            {/* Toggle button for drag/delete */}
+            <button
+              onClick={toggleDragDelete}
+              className="text-white bg-gray-500 p-2 rounded-md"
+            >
+              {isDragDeleteEnabled ? "Done" : "Sort"}
+            </button>
             <DarkModeToggle />
           </nav>
 
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home isDragDeleteEnabled={isDragDeleteEnabled} />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>

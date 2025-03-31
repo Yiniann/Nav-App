@@ -5,14 +5,16 @@
       "title": "Blog",
       "description": "YiNiann's Site",
       "url": "https://en1an.com",
-      "buttonText": "Go to Blog 📖"
+      "buttonText": "Go to Blog 📖",
+      "order": 0
     },
     {
       "id": "2",
       "title": "Shuttle",
       "description": "Network service",
       "url": "https://shuttle.en1an.com",
-      "buttonText": "Shuttle 🚀"
+      "buttonText": "Shuttle 🚀",
+      "order": 1
     },
     {
       "id": "3",
@@ -20,7 +22,8 @@
       "description": "Contact Me",
       "url": "https://t.me/y1niannn",
       "buttonText": "Telegram 📬",
-      "isNewTab": true
+      "isNewTab": true,
+      "order": 2
     },
     {
       "id": "4",
@@ -28,7 +31,8 @@
       "description": "Picture Management",
       "url": "https://img.en1an.com",
       "buttonText": "Lsky 🖼️",
-      "isNewTab": true
+      "isNewTab": true,
+      "order": 3
     },
     {
       "id": "5",
@@ -36,7 +40,8 @@
       "description": "On-Device LLM",
       "url": "https://ai.en1an.com",
       "buttonText": "Open-Web UI 💻",
-      "isNewTab": true
+      "isNewTab": true,
+      "order": 4
     },
     {
       "id": "6",
@@ -44,7 +49,8 @@
       "description": "Game Control Panel",
       "url": "http://mcsm.en1an.com",
       "buttonText": "MCSM Panel 🎮",
-      "isNewTab": true
+      "isNewTab": true,
+      "order": 5
     }
   ]
 }
