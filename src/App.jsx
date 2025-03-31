@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { useSelector } from "react-redux"
 import Home from "./Home"
-import About from "./About"
-import Contact from "./Contact"
+import Notepad from "./Notepad"
+import Manage from "./Manage"
 import DarkModeToggle from "./components/DarkModeToggle"
 import Toast from "./components/Toast"
 import { useState } from "react"
@@ -36,8 +36,8 @@ export default function App() {
           <nav className={`w-250 mt-4 mb-4 flex items-center bg-opacity-40 p-4 shadow-md rounded-xl transition-all duration-300 ${darkMode ? "bg-gray-700" : "bg-sky-500"}`}>
             <div className="flex-1 flex justify-center space-x-6">
               <Link to="/" className="text-white font-mono hover:underline">Home</Link>
-              <Link to="/about" className="text-white font-mono hover:underline">About</Link>
-              <Link to="/contact" className="text-white font-mono hover:underline">Contact</Link>
+              <Link to="/notepad" className="text-white font-mono hover:underline">Notepad</Link>
+              <Link to="/manage" className="text-white font-mono hover:underline">Manage</Link>
             </div>
 
             {/* Toggle button for drag/delete */}
@@ -52,8 +52,8 @@ export default function App() {
 
           <Routes>
             <Route path="/" element={<Home isDragDeleteEnabled={isDragDeleteEnabled} />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/Notepad" element={<Notepad />} />
+            <Route path="/manage" element={<Manage />} />
           </Routes>
         </div>
       </div>
