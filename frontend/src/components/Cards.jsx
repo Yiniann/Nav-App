@@ -45,18 +45,42 @@ const Cards = ({ isDragDeleteEnabled }) => {
   };
 
   const handleDragEnd = (result) => {
-    if (!result.destination) return;
+    if (!result.destination || !isDragDeleteEnabled) return; // Do not reorder when drag-delete is not enabled
+
     const { source, destination } = result;
     dispatch(reorderCards({ sourceIndex: source.index, destinationIndex: destination.index }));
   };
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this card?")) {
-      dispatch(removeCard(id))
-      dispatch(showToast(`Card deleted successfully`))
+      dispatch(removeCard(id));
+      dispatch(showToast(`Card deleted successfully`));
     }
   };
 
+  // 非拖拽模式：普通渲染
+  if (!isDragDeleteEnabled) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {cards.map((card) => (
+          <div key={card.id} className="w-80 p-6 bg-white shadow-lg rounded-3xl text-left transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+            <h3 className="text-xl font-bold mb-2">{card.title}</h3>
+            <p className="text-gray-600 mb-4">{card.description}</p>
+            <button
+              onClick={() =>
+                card.isNewTab ? window.open(card.url, "_blank") : (window.location.href = card.url)
+              }
+              className="px-6 py-2 bg-cyan-500 text-white rounded-3xl hover:bg-cyan-600 w-full"
+            >
+              {card.buttonText}
+            </button>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // 拖拽模式
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="cardsGrid" direction="horizontal">
@@ -64,29 +88,37 @@ const Cards = ({ isDragDeleteEnabled }) => {
           <div ref={provided.innerRef} {...provided.droppableProps} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {cards.map((card, index) => (
               <Draggable key={card.id} draggableId={card.id.toString()} index={index}>
-              {(provided, snapshot) => (
-                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} 
-                     className={`w-80 p-6 bg-white shadow-lg rounded-3xl text-left transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                       snapshot.isDragging ? "opacity-70" : ""
-                     }`}>
-                  <h3 className="text-xl font-bold mb-2">{card.title}</h3>
-                  <p className="text-gray-600 mb-4">{card.description}</p>
-                  <button onClick={() => card.isNewTab ? window.open(card.url, "_blank") : (window.location.href = card.url)} 
-                    className="px-6 py-2 bg-cyan-500 text-white rounded-3xl hover:bg-cyan-600 w-full">
-                    {card.buttonText}
-                  </button>
-                  {isDragDeleteEnabled && (
-                    <button onClick={() => handleDelete(card.id)} className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg w-full">
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    className={`w-80 p-6 bg-white shadow-lg rounded-3xl text-left transition-all duration-300 hover:scale-105 hover:shadow-2xl ${snapshot.isDragging ? "opacity-70" : ""}`}
+                  >
+                    <h3 className="text-xl font-bold mb-2">{card.title}</h3>
+                    <p className="text-gray-600 mb-4">{card.description}</p>
+                    <button
+                      onClick={() =>
+                        card.isNewTab ? window.open(card.url, "_blank") : (window.location.href = card.url)
+                      }
+                      className="px-6 py-2 bg-cyan-500 text-white rounded-3xl hover:bg-cyan-600 w-full"
+                    >
+                      {card.buttonText}
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(card.id)}
+                      className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg w-full"
+                    >
                       删除
                     </button>
-                  )}
-                </div>
-              )}
-            </Draggable>
+                  </div>
+                )}
+              </Draggable>
             ))}
-            {provided.placeholder}
 
-            {isDragDeleteEnabled && (isAdding ? (
+            {/* 新增卡片*/}
+            {isAdding ? (
               <div className="w-80 p-6 bg-white shadow-lg rounded-3xl">
                 <input {...title.fieldProps} placeholder="Title" className="border p-2 w-full rounded mb-2" />
                 <input {...description.fieldProps} placeholder="Description" className="border p-2 w-full rounded mb-2" />
@@ -102,7 +134,9 @@ const Cards = ({ isDragDeleteEnabled }) => {
                 <span className="text-4xl">➕</span>
                 <p className="text-gray-600 mt-2">Add New Navigation</p>
               </div>
-            ))}
+            )}
+
+            {provided.placeholder} 
           </div>
         )}
       </Droppable>
