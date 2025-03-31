@@ -64,19 +64,20 @@ const Cards = ({ isDragDeleteEnabled }) => {
           <div ref={provided.innerRef} {...provided.droppableProps} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {cards.map((card, index) => (
               <Draggable key={card.id} draggableId={card.id.toString()} index={index}>
-                {(provided, snapshot) => (
-                  <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} 
-                    className={`w-80 p-6 bg-white shadow-lg rounded-3xl text-left transform transition-all duration-300 hover:scale-105 hover:shadow-2xl ${snapshot.isDragging ? "opacity-70" : ""}`}>
-                    <h3 className="text-xl font-bold mb-2">{card.title}</h3>
-                    <p className="text-gray-600 mb-4">{card.description}</p>
-                    <button onClick={() => card.isNewTab ? window.open(card.url, "_blank") : (window.location.href = card.url)} 
-                      className="px-6 py-2 bg-cyan-500 text-white rounded-3xl hover:bg-cyan-600 w-full">
-                      {card.buttonText}
-                    </button>
-                    {isDragDeleteEnabled && <button onClick={() => handleDelete(card.id)} className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg w-full">删除</button>}
-                  </div>
-                )}
-              </Draggable>
+              {(provided, snapshot) => (
+                <div ref={provided.innerRef} {...provided.draggableProps} 
+                     {...(isDragDeleteEnabled ? provided.dragHandleProps : {})} 
+                     className={`w-80 p-6 bg-white shadow-lg rounded-3xl text-left transition-all duration-300 hover:scale-105 hover:shadow-2xl ${snapshot.isDragging ? "opacity-70" : ""}`}>
+                  <h3 className="text-xl font-bold mb-2">{card.title}</h3>
+                  <p className="text-gray-600 mb-4">{card.description}</p>
+                  <button onClick={() => card.isNewTab ? window.open(card.url, "_blank") : (window.location.href = card.url)} 
+                    className="px-6 py-2 bg-cyan-500 text-white rounded-3xl hover:bg-cyan-600 w-full">
+                    {card.buttonText}
+                  </button>
+                  {isDragDeleteEnabled && <button onClick={() => handleDelete(card.id)} className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg w-full">删除</button>}
+                </div>
+              )}
+            </Draggable>
             ))}
             {provided.placeholder}
 
