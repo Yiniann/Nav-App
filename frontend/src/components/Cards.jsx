@@ -51,8 +51,9 @@ const Cards = ({ isDragDeleteEnabled }) => {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm("确定要删除这张卡片吗？")) {
-      dispatch(removeCard(id));
+    if (window.confirm("Are you sure you want to delete this card?")) {
+      dispatch(removeCard(id))
+      dispatch(showToast(`Card deleted successfully`))
     }
   };
 
