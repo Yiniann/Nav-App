@@ -11,7 +11,7 @@ export default function App() {
   const darkMode = useSelector((state) => state.darkMode) //明暗状态
   const [isDragDeleteEnabled, setIsDragDeleteEnabled] = useState(false)//sort状态
 
-  const toggleDragDelete = () => {
+  const toggleSort = () => {
     setIsDragDeleteEnabled(!isDragDeleteEnabled); //切换sort事件处理
   }
 
@@ -42,7 +42,7 @@ export default function App() {
 
             {/* Toggle button for drag/delete */}
             <button
-              onClick={toggleDragDelete}
+              onClick={toggleSort}
               className="text-white bg-gray-500 p-2 rounded-md"
             >
               {isDragDeleteEnabled ? "Done" : "Sort"}
