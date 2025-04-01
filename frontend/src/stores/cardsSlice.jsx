@@ -9,10 +9,9 @@ export const fetchCards = createAsyncThunk("cards/fetchCards", async () => {
 });
 
 // 添加卡片
-export const addCard = createAsyncThunk("cards/addCard", async (newCard) => {
-  //生成order号码
-  const cardsCount = await fetch(API_URL).then(res => res.json()).then(data => data.length);
-  newCard.order = cardsCount + 1
+export const addCard = createAsyncThunk("cards/addCard", async (newCard, { getState }) => {
+  const cardsCount = getState().cards.length;  // 从 Redux 获取卡片数量
+  newCard.order = cardsCount + 1;  // 计算新的 order
 
   const response = await fetch(API_URL, {
     method: "POST",
@@ -29,7 +28,7 @@ export const removeCard = createAsyncThunk("cards/removeCard", async (id) => {
   throw new Error("Failed to delete card");
 });
 
-// **持久化排序**
+// 持久化排序
 export const reorderCards = createAsyncThunk(
   "cards/reorderCards",
   async ({ sourceIndex, destinationIndex }, { getState }) => {
@@ -42,11 +41,15 @@ export const reorderCards = createAsyncThunk(
     // 重新计算 `order`，并发送更新请求
     const updatedCards = cards.map((card, index) => ({ ...card, order: index }));
 
-    await fetch(`${API_URL}/reorder`, {
+    const response = await fetch(`${API_URL}/reorder`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedCards),
     });
+
+    if (!response.ok) {
+      throw new Error('Failed to reorder cards');
+    }
 
     return updatedCards;
   }
@@ -60,17 +63,17 @@ const cardsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchCards.fulfilled, (state, action) => {
-        // **按照 order 排序后再更新 state**
+        // 按照 order 排序后更新 state
         return action.payload.sort((a, b) => a.order - b.order);
       })
       .addCase(addCard.fulfilled, (state, action) => {
-        state.push(action.payload);
+        state.push(action.payload);  // 添加新卡片
       })
       .addCase(removeCard.fulfilled, (state, action) => {
-        return state.filter((card) => card.id !== action.payload);
+        return state.filter((card) => card.id !== action.payload);  // 删除卡片
       })
       .addCase(reorderCards.fulfilled, (state, action) => {
-        return action.payload;
+        return action.payload;  // 更新排序后的卡片列表
       });
   },
 });

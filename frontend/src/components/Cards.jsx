@@ -20,11 +20,16 @@ const Cards = ({ isDragDeleteEnabled }) => {
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAddCard = async () => {
+    // 检查所有字段是否填写
     if (!title.fieldProps.value || !description.fieldProps.value || !url.fieldProps.value || !buttonText.fieldProps.value) {
-      dispatch(showToast(`Please enter all fields!`));
+      dispatch(showToast("Please enter all fields!"));
       return;
     }
-
+  
+    // 获取当前的卡片列表来计算最大 order
+    const currentCards = await dispatch(fetchCards()).unwrap(); // 使用 unwrap 获取数据
+    const maxOrder = currentCards.length ? Math.max(...currentCards.map(card => card.order)) : 0;
+  
     const newCard = {
       title: title.fieldProps.value,
       description: description.fieldProps.value,
@@ -33,16 +38,25 @@ const Cards = ({ isDragDeleteEnabled }) => {
       isNewTab: true,
       order: cards.length, 
     };
-
-    await dispatch(addCard(newCard));
-    dispatch(showToast(`Card "${newCard.title}" added successfully`));
-
-    title.reset();
-    description.reset();
-    url.reset();
-    buttonText.reset();
-    setIsAdding(false);
+  
+    // 发送添加卡片的请求
+    try {
+      await dispatch(addCard(newCard));
+      dispatch(showToast(`Card "${newCard.title}" added successfully`));
+  
+      // 重置表单
+      title.reset();
+      description.reset();
+      url.reset();
+      buttonText.reset();
+    } catch (error) {
+      console.error("Failed to add card:", error);
+      dispatch(showToast("Failed to add card"));
+    } finally {
+      setIsAdding(false); // 确保在所有操作完成后再更新状态
+    }
   };
+  
 
   const handleDragEnd = (result) => {
     if (!result.destination || !isDragDeleteEnabled) return; // Do not reorder when drag-delete is not enabled
