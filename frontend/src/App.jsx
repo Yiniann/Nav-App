@@ -19,11 +19,13 @@ export default function App() {
     <Router>
       {/*通知 */}
       <Toast />
+      {/*背景色 */}
       <div className={`min-h-screen flex justify-center items-center transition-all duration-300 ${darkMode ? "bg-gray-900" : "bg-sky-200/40"}`}>
-        <div className="h-screen flex flex-col items-center bg-transparent">
+        {/*主体 */}
+        <div className="w-3/7 min-h-screen flex flex-col items-center bg-transparent">
            {/* Header Image */}
            <div
-            className="mt-6 w-250 h-100 bg-cover rounded-3xl"
+            className="w-full h-[28vh] bg-cover rounded-3xl"
             style={{
               backgroundImage: "url('https://pic.en1an.com/2025/03/30/67e82c28b640e.jpg')",
               backgroundPosition: "top -40px center",
@@ -33,7 +35,8 @@ export default function App() {
               <h1>YiNiann's NAV</h1>
             </div>
           </div>
-          <nav className={`w-250 mt-4 mb-4 flex items-center bg-opacity-40 p-4 shadow-md rounded-xl transition-all duration-300 ${darkMode ? "bg-gray-700" : "bg-sky-500"}`}>
+          {/*导航栏 */}
+          <nav className={`w-full  mt-4 mb-4 flex items-center bg-opacity-40 p-1 shadow-md rounded-xl transition-all duration-300 ${darkMode ? "bg-gray-700" : "bg-sky-500"}`}>
             <div className="flex-1 flex justify-center space-x-6">
               <Link to="/" className="text-white font-mono hover:underline">Home</Link>
               <Link to="/notepad" className="text-white font-mono hover:underline">Notepad</Link>
@@ -43,7 +46,7 @@ export default function App() {
             {/* Toggle button for drag/delete */}
             <button
               onClick={toggleSort}
-              className="text-white bg-gray-500 p-2 rounded-md"
+              className="text-white bg-gray-500/50 p-2 rounded-3xl  transition-transform duration-200 hover:bg-gray-500 hover:rotate-6 mt-auto"
             >
               {isDragDeleteEnabled ? "Done" : "Sort"}
             </button>
