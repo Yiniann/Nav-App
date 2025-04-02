@@ -22,7 +22,7 @@ export default function App() {
       {/*背景色 */}
       <div className={`min-h-screen flex justify-center items-center transition-all duration-300 ${darkMode ? "bg-gray-900" : "bg-sky-200/40"}`}>
         {/*主体 */}
-        <div className="w-3/7 min-h-screen flex flex-col items-center bg-transparent">
+        <div className="w-4/5 sm:w-4/5 md:w-3/5 lg:w-2/5 min-h-screen flex flex-col items-center bg-transparent">
            {/* Header Image */}
            <div
             className="w-full h-[28vh] bg-cover rounded-3xl"
