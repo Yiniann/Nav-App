@@ -22,19 +22,18 @@ export default function App() {
       {/*背景色 */}
       <div className={`min-h-screen flex justify-center items-center transition-all duration-300 ${darkMode ? "bg-gray-900" : "bg-sky-200/40"}`}>
         {/*主体 */}
-        <div className="w-4/5 sm:w-4/5 md:w-3/5 lg:w-2/5 min-h-screen flex flex-col items-center bg-transparent">
-           {/* Header Image */}
-           <div
-            className="w-full h-[28vh] bg-cover rounded-3xl"
+        <div className="w-4/5 min-w-[40px] sm:w-4/5 md:w-3/5 lg:w-2/5 min-h-screen flex flex-col items-center bg-transparent">
+          {/* Header Image */}
+          <div
+            className="w-full min-h-[30vh] max-h-[100px]
+                      bg-cover bg-top xl:bg-[top_-20px] rounded-3xl flex items-center justify-center"
             style={{
-              backgroundImage: "url('https://pic.en1an.com/2025/03/30/67e82c28b640e.jpg')",
-              backgroundPosition: "top -40px center",
+              backgroundImage: "url('https://pic.en1an.com/2025/04/02/67ed2de5472d5.jpg')",
             }}
           >
-            <div className="h-full flex items-center justify-center text-white text-4xl font-bold">
-              <h1>YiNiann's NAV</h1>
-            </div>
+            <h1 className="text-white text-4xl font-bold leading-none">YiNiann's NAV</h1>
           </div>
+
           {/*导航栏 */}
           <nav className={`w-full  mt-4 mb-4 flex items-center bg-opacity-40 p-1 shadow-md rounded-xl transition-all duration-300 ${darkMode ? "bg-gray-700" : "bg-sky-500"}`}>
             <div className="flex-1 flex justify-center space-x-6">
