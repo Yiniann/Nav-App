@@ -7,6 +7,7 @@ import useField from "./hooks/useField";
 
 const Home = () => {
   const [isDragDeleteEnabled, setIsDragDeleteEnabled] = useState(false); 
+  const darkMode = useSelector((state) => state.darkMode)
   const cards = useSelector((state) => state.cards || []);
   const dispatch = useDispatch();
   const [isAdding, setIsAdding] = useState(false);
@@ -111,7 +112,7 @@ const Home = () => {
       {/*切换Sort */}
       <div className="mt-2 w-full flex justify-end">
       <label className="flex items-center cursor-pointer">
-        <span className="mr-3 text-dark">{isDragDeleteEnabled ? "Done" : "Sort"}</span>
+        <span className={`mr-3 ${darkMode ? "text-white" : "text-dark"}`}>{isDragDeleteEnabled ? "Done" : "Sort"}</span>
         <div className="relative">
           <input
             type="checkbox"
