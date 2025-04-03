@@ -1,10 +1,6 @@
 const CardsRouter = require('express').Router();
 const poolPromise = require('../config/db');
 
-// 测试 API
-CardsRouter.get('/hello', (req, res) => {
-  res.send('<h1>Hello World!</h1>');
-});
 
 // 获取所有卡片
 CardsRouter.get('/', async (req, res) => {
@@ -72,6 +68,7 @@ CardsRouter.put('/:id', async (req, res) => {
 });
 
 // 删除卡片
+// 删除卡片
 CardsRouter.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -80,11 +77,12 @@ CardsRouter.delete('/:id', async (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Card not found' });
     }
-    res.status(204).end();
+    res.status(200).json({ id }); 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // 更新卡片顺序
 CardsRouter.post('/reorder', async (req, res) => {

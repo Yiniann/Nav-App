@@ -1,6 +1,4 @@
-const pool = require('../config/db');
-
-const createCardsTable = async () => {
+const createCardsTable = async (pool) => {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS cards (
@@ -40,7 +38,4 @@ const createCardsTable = async () => {
   }
 };
 
-// 运行初始化
-createCardsTable();
-
-module.exports = pool;
+module.exports = createCardsTable;

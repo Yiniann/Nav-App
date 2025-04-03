@@ -1,13 +1,11 @@
 const mysql = require('mysql2');
 
-// 初始连接（不指定 database）
 const initPool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '12011201'
 }).promise();
 
-// 创建数据库并初始化最终连接池
 const initDatabase = async () => {
   try {
     await initPool.query("CREATE DATABASE IF NOT EXISTS nav_app");
@@ -16,7 +14,7 @@ const initDatabase = async () => {
     // 关闭初始连接池
     await initPool.end();
 
-    // 创建新的连接池，连接到 `nav_app`
+    // 连接 `nav_app` 数据库
     const pool = mysql.createPool({
       host: 'localhost',
       user: 'root',
@@ -25,13 +23,14 @@ const initDatabase = async () => {
     }).promise();
 
     console.log("✅ Connected to database: nav_app");
-    return pool;
+
+    return pool; // **返回正确的 `pool`**
   } catch (err) {
     console.error("❌ Database initialization error:", err);
     process.exit(1);
   }
 };
 
-// 立即初始化数据库，并导出 `poolPromise`
+// **确保 `poolPromise` 是一个 `Promise`**
 const poolPromise = initDatabase();
 module.exports = poolPromise;

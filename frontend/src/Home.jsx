@@ -54,10 +54,22 @@ const Home = ({ isDragDeleteEnabled }) => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this card?")) {
-      dispatch(removeCard(id));
-      dispatch(showToast(`Card deleted successfully`));
+      // 删除卡片
+      dispatch(removeCard(id))
+        .unwrap()  // 确保删除操作成功
+        .then(() => {
+          // 删除成功后显示提示
+          dispatch(showToast("Card deleted successfully"));
+        })
+        .catch((error) => {
+          console.error("Failed to delete card:", error);
+          // 如果删除失败，显示失败提示
+          dispatch(showToast("Failed to delete card"));
+        });
     }
   };
+  
+  
 
   const handleDragEnd = (result) => {
     if (!result.destination || !isDragDeleteEnabled) return;

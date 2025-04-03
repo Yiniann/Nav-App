@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const API_URL = "http://localhost:3001/cards";
 
 // 获取卡片
 export const fetchCards = createAsyncThunk("cards/fetchCards", async () => {
-  const response = await fetch(API_URL);
-  return response.json();
+  const response = await axios.get(API_URL);
+  return response.data;  // axios 返回的对象中包含 `data` 属性
 });
 
 // 添加卡片
@@ -13,18 +14,16 @@ export const addCard = createAsyncThunk("cards/addCard", async (newCard, { getSt
   const cardsCount = getState().cards.length;  // 从 Redux 获取卡片数量
   newCard.order = cardsCount + 1;  // 计算新的 order
 
-  const response = await fetch(API_URL, {
-    method: "POST",
+  const response = await axios.post(API_URL, newCard, {
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newCard),
   });
-  return response.json();
+  return response.data;
 });
 
 // 删除卡片
 export const removeCard = createAsyncThunk("cards/removeCard", async (id) => {
-  const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-  if (response.ok) return id;
+  const response = await axios.delete(`${API_URL}/${id}`);
+  if (response.status === 200) return id;  // axios 删除请求成功时返回状态 200
   throw new Error("Failed to delete card");
 });
 
@@ -41,13 +40,11 @@ export const reorderCards = createAsyncThunk(
     // 重新计算 `order`，并发送更新请求
     const updatedCards = cards.map((card, index) => ({ ...card, order: index }));
 
-    const response = await fetch(`${API_URL}/reorder`, {
-      method: "POST",
+    const response = await axios.post(`${API_URL}/reorder`, updatedCards, {
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedCards),
     });
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error('Failed to reorder cards');
     }
 
@@ -70,8 +67,8 @@ const cardsSlice = createSlice({
         state.push(action.payload);  // 添加新卡片
       })
       .addCase(removeCard.fulfilled, (state, action) => {
-        return state.filter((card) => card.id !== action.payload);  // 删除卡片
-      })
+        return state.filter((card) => card.id !== action.payload);  // 直接从 state 中删除卡片
+      })      
       .addCase(reorderCards.fulfilled, (state, action) => {
         return action.payload;  // 更新排序后的卡片列表
       });
