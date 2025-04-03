@@ -37,9 +37,9 @@ export default function App() {
           {/*导航栏 */}
           <nav className={`w-full  mt-4 mb-4 flex items-center bg-opacity-40 p-1 shadow-md rounded-xl transition-all duration-300 ${darkMode ? "bg-gray-700" : "bg-sky-500"}`}>
             <div className="flex-1 flex justify-center space-x-6">
-              <Link to="/" className="text-white font-mono hover:underline">Home</Link>
-              <Link to="/notepad" className="text-white font-mono hover:underline">Notepad</Link>
-              <Link to="/manage" className="text-white font-mono hover:underline">Manage</Link>
+              <Link to="/" className="text-white  hover:underline">Home</Link>
+              <Link to="/notepad" className="text-white hover:underline">Notepad</Link>
+              <Link to="/manage" className="text-white  hover:underline">Manage</Link>
             </div>
 
             {/* Toggle button for drag/delete */}
