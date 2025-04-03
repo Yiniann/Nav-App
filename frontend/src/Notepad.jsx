@@ -63,13 +63,17 @@ const Notepad = () => {
         dispatch(showToast("Note deleted successfully!"));
     };
     
+    const handleCancelEdit = () => {
+        setEditingNote(null);
+    };
+    
 
     return (
-        <div className="max-w-2xl mx-auto mt-6 p-4 bg-gray-100 rounded-lg shadow-lg">
+        <div className="w-full max-w-2xl mx-auto mt-6 p-4 bg-gray-100 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4 text-center">Notepad</h2>
 
             {/* TipTap 编辑器 */}
-            <div className="bg-white p-2 border rounded-md">
+            <div className="w-full bg-white p-2 border rounded-md">
                 <EditorContent editor={editor} />
             </div>
             <button
@@ -91,7 +95,7 @@ const Notepad = () => {
                             
                             {/* 显示 TipTap 编辑器，支持编辑模式 */}
                             {editingNote === note.id ? (
-                                <TipTapEditor note={note} onUpdate={handleUpdateNote} />
+                                <TipTapEditor note={note} onUpdate={handleUpdateNote} onCancel={handleCancelEdit}/>
                             ) : (
                                 <div className="text-gray-800 mt-2" dangerouslySetInnerHTML={{ __html: note.content }} />
                             )}
