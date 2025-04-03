@@ -1,36 +1,46 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { fetchNotes, addNote, deleteNote, updateNote } from "./stores/notesSlice";
-import TipTapEditor from "./components/TipTapEditor";  // 确保正确导入
+import TipTapEditor from "./components/TipTapEditor"; 
+import formatDate from "./utils/formatDate"; 
 
 const Notepad = () => {
     const dispatch = useDispatch();
-    const notes = useSelector((state) => state.notes.notes || []);  // 确保 notes 是数组
+    const notes = useSelector((state) => state.notes.notes || []);
     console.log("Notes data:", notes);
+
+    const [editingNote, setEditingNote] = useState(null);  // ✅ 记录当前编辑的笔记 ID
+    const [showMenu, setShowMenu] = useState(null);  // ✅ 控制菜单的显示状态
 
     useEffect(() => {
         dispatch(fetchNotes());
     }, [dispatch]);
 
-    // TipTap 编辑器实例
     const editor = useEditor({
         extensions: [StarterKit],
         content: "",
     });
 
-    const handleAddNote = () => {
+    const handleAddNote = async () => {
         if (!editor || !editor.getHTML().trim()) return;
-
-        const newNote = { content: editor.getHTML() };
-        dispatch(addNote(newNote));
+    
+        const newNote = {
+            content: editor.getHTML()
+        };
+    
+        await dispatch(addNote(newNote));
+        dispatch(fetchNotes());  
         editor.commands.clearContent();
     };
-
-    const handleUpdateNote = (id, content) => {
-        dispatch(updateNote({ id, content }));
+    
+    const handleUpdateNote = async (id, content) => {
+        await dispatch(updateNote({ id, content }));
+        dispatch(fetchNotes());  
+        setEditingNote(null);
     };
+    
 
     return (
         <div className="max-w-2xl mx-auto mt-6 p-4 bg-gray-100 rounded-lg shadow-lg">
@@ -53,14 +63,44 @@ const Notepad = () => {
                     <p className="text-center text-gray-500">No notes available.</p>
                 ) : (
                     notes.map((note) => (
-                        <div key={note.id} className="p-3 bg-white shadow-md rounded-lg">
-                            <TipTapEditor note={note} onUpdate={handleUpdateNote} />
-                            <button
-                                onClick={() => dispatch(deleteNote(note.id))}
-                                className="mt-2 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                            >
-                                Delete
-                            </button>
+                        <div key={note.id} className="p-4 bg-white shadow-md rounded-lg relative">                            
+                            {/* 格式化时间显示 */}
+                            <div className="text-sm text-gray-500">{formatDate(note.created_at)}</div>
+                            
+                            {/* 显示 TipTap 编辑器，支持编辑模式 */}
+                            {editingNote === note.id ? (
+                                <TipTapEditor note={note} onUpdate={handleUpdateNote} />
+                            ) : (
+                                <div className="text-gray-800 mt-2" dangerouslySetInnerHTML={{ __html: note.content }} />
+                            )}
+
+                            {/* 右下角的 "..." 菜单 */}
+                            <div className="absolute bottom-2 right-2">
+                                <button
+                                    className="px-2 py-1 bg-gray-200 rounded-full"
+                                    onClick={() => setShowMenu(showMenu === note.id ? null : note.id)}
+                                >
+                                    ...
+                                </button>
+
+                                {/* 下拉菜单 */}
+                                {showMenu === note.id && (
+                                    <div className="absolute right-0 mt-1 w-24 bg-white shadow-lg rounded-md border">
+                                        <button
+                                            onClick={() => setEditingNote(note.id)}
+                                            className="block w-full text-left px-3 py-1 text-gray-700 hover:bg-gray-100"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => dispatch(deleteNote(note.id))}
+                                            className="block w-full text-left px-3 py-1 text-red-600 hover:bg-gray-100"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     ))
                 )}

@@ -32,17 +32,26 @@ NotesRouter.get('/:id', async (req, res) => {
 // 创建新笔记
 NotesRouter.post('/', async (req, res) => {
     const { content } = req.body;
+
+    if (!content || typeof content !== "string") {
+        return res.status(400).json({ error: "Content is required and must be a string" });
+    }
+
     try {
         const pool = await poolPromise;
         const [result] = await pool.query(
             'INSERT INTO notes (content) VALUES (?)',
             [content]
         );
-        res.status(201).json({ id: result.insertId, content, created_at: new Date() });
+
+        const [rows] = await pool.query("SELECT * FROM notes WHERE id = ?", [result.insertId]);
+        res.status(201).json(rows[0]);  // 返回完整的笔记数据
     } catch (err) {
+        console.error("Error adding note:", err);
         res.status(500).json({ error: err.message });
     }
 });
+
 
 // 更新笔记
 NotesRouter.put('/:id', async (req, res) => {

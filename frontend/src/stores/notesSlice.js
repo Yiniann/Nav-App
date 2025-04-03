@@ -45,11 +45,11 @@ const notesSlice = createSlice({
                 state.notes.push(action.payload);
             })
             .addCase(updateNote.fulfilled, (state, action) => {
-                const note = state.notes.find((n) => n.id === action.payload.id);
-                if (note) {
-                    note.content = action.payload.content;
-                }
-            })
+                const { id, content } = action.payload;
+                state.notes = state.notes.map((note) =>
+                    note.id === id ? { ...note, content } : note
+                );
+            })            
             .addCase(deleteNote.fulfilled, (state, action) => {
                 state.notes = state.notes.filter((note) => note.id !== action.payload);
             });
