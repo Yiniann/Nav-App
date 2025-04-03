@@ -36,7 +36,7 @@ const TipTapEditor = ({ note, onUpdate, onCancel }) => {
                     Save
                 </button>
                 <button
-                    onClick={onCancel} // 取消按钮，调用 onCancel 退出编辑
+                    onClick={onCancel} 
                     className="px-3 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
                 >
                     Cancel

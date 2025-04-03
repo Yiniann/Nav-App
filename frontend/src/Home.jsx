@@ -5,7 +5,8 @@ import { showToast } from "./stores/toastSlice";
 import Cards from "./components/Cards";
 import useField from "./hooks/useField";
 
-const Home = ({ isDragDeleteEnabled }) => {
+const Home = () => {
+  const [isDragDeleteEnabled, setIsDragDeleteEnabled] = useState(false); // 处理 Sort 状态
   const cards = useSelector((state) => state.cards || []);
   const dispatch = useDispatch();
   const [isAdding, setIsAdding] = useState(false);
@@ -33,15 +34,14 @@ const Home = ({ isDragDeleteEnabled }) => {
         new URL(inputUrl);
         return inputUrl;
       } catch (e) {
-            return `//${inputUrl}`;
+        return `//${inputUrl}`;
       }
     };
-    
 
     const newCard = {
       title: title.fieldProps.value,
       description: description.fieldProps.value,
-      url:  formatUrl(url.fieldProps.value),
+      url: formatUrl(url.fieldProps.value),
       buttonText: buttonText.fieldProps.value,
       isNewTab: true,
       order: maxOrder + 1,
@@ -66,7 +66,7 @@ const Home = ({ isDragDeleteEnabled }) => {
     if (window.confirm("Are you sure you want to delete this card?")) {
       // 删除卡片
       dispatch(removeCard(id))
-        .unwrap()  // 确保删除操作成功
+        .unwrap() // 确保删除操作成功
         .then(() => {
           // 删除成功后显示提示
           dispatch(showToast("Card deleted successfully"));
@@ -78,13 +78,15 @@ const Home = ({ isDragDeleteEnabled }) => {
         });
     }
   };
-  
-  
 
   const handleDragEnd = (result) => {
     if (!result.destination || !isDragDeleteEnabled) return;
     const { source, destination } = result;
     dispatch(reorderCards({ sourceIndex: source.index, destinationIndex: destination.index }));
+  };
+
+  const toggleSort = () => {
+    setIsDragDeleteEnabled(!isDragDeleteEnabled); // 切换 Sort 按钮的状态
   };
 
   return (
@@ -109,6 +111,30 @@ const Home = ({ isDragDeleteEnabled }) => {
           </div>
         </div>
       )}
+      {/*切换Sort */}
+      <div className="mt-2 w-full flex justify-end">
+      <label className="flex items-center cursor-pointer">
+        <span className="mr-3 text-dark">{isDragDeleteEnabled ? "Done" : "Sort"}</span>
+        <div className="relative">
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={isDragDeleteEnabled}
+            onChange={toggleSort}
+          />
+          <div
+            className={`block w-14 h-8 rounded-full transition-colors duration-300 ${
+              isDragDeleteEnabled ? "bg-green-500" : "bg-gray-500"
+            }`}
+          ></div>
+          <div
+            className={`dot absolute left-1 top-1 w-6 h-6 rounded-full transition-all duration-300 ${
+              isDragDeleteEnabled ? "translate-x-6 bg-white" : "bg-white"
+            }`}
+          ></div>
+        </div>
+      </label>
+    </div>
     </div>
   );
 };

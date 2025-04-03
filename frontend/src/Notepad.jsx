@@ -12,8 +12,8 @@ const Notepad = () => {
     const notes = useSelector((state) => state.notes.notes || []);
     console.log("Notes data:", notes);
 
-    const [editingNote, setEditingNote] = useState(null);  // ✅ 记录当前编辑的笔记 ID
-    const [showMenu, setShowMenu] = useState(null);  // ✅ 控制菜单的显示状态
+    const [editingNote, setEditingNote] = useState(null);  // 当前编辑的笔记 ID
+    const [showMenu, setShowMenu] = useState(null);  // 控制菜单的显示状态
 
     useEffect(() => {
         dispatch(fetchNotes());
@@ -80,8 +80,6 @@ const Notepad = () => {
             <div className="w-full bg-white p-2 rounded-md relative flex flex-col">
             {/* TipTap 编辑器 */}
             <EditorContent editor={editor} />
-            
-            {/* 右下角的 Add Note 按钮 */}
             <div className="mt-3 flex justify-end">
                 <button
                     onClick={handleAddNote}
@@ -123,8 +121,8 @@ const Notepad = () => {
                                     <div className="absolute bottom-full right-0 mb-1 w-24 bg-white shadow-lg rounded-md border">
                                         <button
                                             onClick={() => {
-                                                setEditingNote(note.id);  // 进入编辑模式
-                                                setShowMenu(null);  // 关闭下拉菜单
+                                                setEditingNote(note.id); 
+                                                setShowMenu(null); 
                                             }}
                                             className="block w-full text-left px-3 py-1 text-gray-700 hover:bg-gray-100"
                                         >
