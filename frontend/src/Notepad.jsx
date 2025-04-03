@@ -84,7 +84,7 @@ const Notepad = () => {
                 {notes.length === 0 ? (
                     <p className="text-center text-gray-500">No notes available.</p>
                 ) : (
-                    notes.map((note) => (
+                    notes.slice().reverse().map((note) => (
                         <div key={note.id} className="p-4 bg-white shadow-md rounded-lg relative">                            
                             {/* 格式化时间显示 */}
                             <div className="text-sm text-gray-500">{formatDate(note.created_at)}</div>
