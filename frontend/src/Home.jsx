@@ -28,10 +28,20 @@ const Home = ({ isDragDeleteEnabled }) => {
     const currentCards = await dispatch(fetchCards()).unwrap();
     const maxOrder = currentCards.length ? Math.max(...currentCards.map(card => card.order)) : 0;
 
+    const formatUrl = (inputUrl) => {
+      try {
+        new URL(inputUrl);
+        return inputUrl;
+      } catch (e) {
+            return `//${inputUrl}`;
+      }
+    };
+    
+
     const newCard = {
       title: title.fieldProps.value,
       description: description.fieldProps.value,
-      url: url.fieldProps.value,
+      url:  formatUrl(url.fieldProps.value),
       buttonText: buttonText.fieldProps.value,
       isNewTab: true,
       order: maxOrder + 1,
