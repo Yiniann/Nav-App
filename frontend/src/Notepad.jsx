@@ -22,6 +22,11 @@ const Notepad = () => {
     const editor = useEditor({
         extensions: [StarterKit],
         content: "",
+        editorProps: {
+            attributes: {
+                style: "min-height: 150px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; white-space: pre-wrap;",
+            },
+        },
     });
 
     const handleAddNote = async () => {
@@ -72,16 +77,20 @@ const Notepad = () => {
         <div className="w-full max-w-2xl mx-auto mt-6 p-4 bg-gray-100 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4 text-center">Notepad</h2>
 
+            <div className="w-full bg-white p-2 rounded-md relative flex flex-col">
             {/* TipTap 编辑器 */}
-            <div className="w-full bg-white p-2 border rounded-md">
-                <EditorContent editor={editor} />
+            <EditorContent editor={editor} />
+            
+            {/* 右下角的 Add Note 按钮 */}
+            <div className="mt-3 flex justify-end">
+                <button
+                    onClick={handleAddNote}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                    Add Note
+                </button>
             </div>
-            <button
-                onClick={handleAddNote}
-                className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-                Add Note
-            </button>
+        </div>
 
             {/* 笔记列表 */}
             <div className="mt-6 space-y-3">
