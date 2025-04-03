@@ -5,6 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { fetchNotes, addNote, deleteNote, updateNote } from "./stores/notesSlice";
 import TipTapEditor from "./components/TipTapEditor"; 
 import formatDate from "./utils/formatDate"; 
+import { showToast } from "./stores/toastSlice"
 
 const Notepad = () => {
     const dispatch = useDispatch();
@@ -24,21 +25,42 @@ const Notepad = () => {
     });
 
     const handleAddNote = async () => {
-        if (!editor || !editor.getHTML().trim()) return;
+        if (!editor) return;
     
-        const newNote = {
-            content: editor.getHTML()
-        };
+        const rawContent = editor.getHTML();
+        const textContent = rawContent.replace(/<[^>]*>/g, "").trim(); 
+    
+        if (!textContent) {
+            dispatch(showToast("Note cannot be empty!")) 
+            return;
+        }
+    
+        const newNote = { content: rawContent };
     
         await dispatch(addNote(newNote));
-        dispatch(fetchNotes());  
+        dispatch(fetchNotes());
         editor.commands.clearContent();
+        dispatch(showToast("Note added successfully!"));
     };
     
     const handleUpdateNote = async (id, content) => {
+        const textContent = content.replace(/<[^>]*>/g, "").trim();
+    
+        if (!textContent) {
+            dispatch(showToast("Note content cannot be empty!")); 
+            return;
+        }
+    
         await dispatch(updateNote({ id, content }));
-        dispatch(fetchNotes());  
+        dispatch(fetchNotes());
         setEditingNote(null);
+        dispatch(showToast("Note updated successfully!"))
+    };
+
+    const handleDeleteNote = async (id) => {
+        await dispatch(deleteNote(id));
+        dispatch(fetchNotes());
+        dispatch(showToast("Note deleted successfully!"));
     };
     
 
@@ -74,8 +96,8 @@ const Notepad = () => {
                                 <div className="text-gray-800 mt-2" dangerouslySetInnerHTML={{ __html: note.content }} />
                             )}
 
-                            {/* 右下角的 "..." 菜单 */}
-                            <div className="absolute bottom-2 right-2">
+                            {/* 右上角的 "..." 菜单 */}
+                            <div className="absolute top-2 right-2">
                                 <button
                                     className="px-2 py-1 bg-gray-200 rounded-full"
                                     onClick={() => setShowMenu(showMenu === note.id ? null : note.id)}
@@ -85,15 +107,18 @@ const Notepad = () => {
 
                                 {/* 下拉菜单 */}
                                 {showMenu === note.id && (
-                                    <div className="absolute right-0 mt-1 w-24 bg-white shadow-lg rounded-md border">
+                                    <div className="absolute bottom-full right-0 mb-1 w-24 bg-white shadow-lg rounded-md border">
                                         <button
-                                            onClick={() => setEditingNote(note.id)}
+                                            onClick={() => {
+                                                setEditingNote(note.id);  // 进入编辑模式
+                                                setShowMenu(null);  // 关闭下拉菜单
+                                            }}
                                             className="block w-full text-left px-3 py-1 text-gray-700 hover:bg-gray-100"
                                         >
                                             Edit
                                         </button>
                                         <button
-                                            onClick={() => dispatch(deleteNote(note.id))}
+                                            onClick={() =>handleDeleteNote(note.id)}
                                             className="block w-full text-left px-3 py-1 text-red-600 hover:bg-gray-100"
                                         >
                                             Delete
