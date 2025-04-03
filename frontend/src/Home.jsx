@@ -6,7 +6,7 @@ import Cards from "./components/Cards";
 import useField from "./hooks/useField";
 
 const Home = () => {
-  const [isDragDeleteEnabled, setIsDragDeleteEnabled] = useState(false); // 处理 Sort 状态
+  const [isDragDeleteEnabled, setIsDragDeleteEnabled] = useState(false); 
   const cards = useSelector((state) => state.cards || []);
   const dispatch = useDispatch();
   const [isAdding, setIsAdding] = useState(false);
@@ -64,16 +64,13 @@ const Home = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this card?")) {
-      // 删除卡片
       dispatch(removeCard(id))
-        .unwrap() // 确保删除操作成功
+        .unwrap() 
         .then(() => {
-          // 删除成功后显示提示
           dispatch(showToast("Card deleted successfully"));
         })
         .catch((error) => {
           console.error("Failed to delete card:", error);
-          // 如果删除失败，显示失败提示
           dispatch(showToast("Failed to delete card"));
         });
     }
@@ -86,7 +83,7 @@ const Home = () => {
   };
 
   const toggleSort = () => {
-    setIsDragDeleteEnabled(!isDragDeleteEnabled); // 切换 Sort 按钮的状态
+    setIsDragDeleteEnabled(!isDragDeleteEnabled); 
   };
 
   return (

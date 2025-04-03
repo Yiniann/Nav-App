@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Home from "./Home";
 import Notepad from "./Notepad";
@@ -8,6 +8,7 @@ import Toast from "./components/Toast";
 
 export default function App() {
   const darkMode = useSelector((state) => state.darkMode); // 明暗模式状态
+  
 
   return (
     <Router>

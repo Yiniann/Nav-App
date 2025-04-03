@@ -36,7 +36,7 @@ const Cards = ({
       {/* 拖拽模式 */}
       {isDragDeleteEnabled && (
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="cardsGrid" direction="horizontal">
+          <Droppable droppableId="cardsGrid">
             {(provided) => (
               <div
                 ref={provided.innerRef}
@@ -44,13 +44,15 @@ const Cards = ({
                 className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
               >
                 {cards.map((card, index) => (
-                  <Draggable key={card.id} draggableId={card.id.toString()} index={index}>
+                  <Draggable key={card.id} draggableId={String(card.id)} index={index}>
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`p-3 bg-white shadow-lg rounded-3xl text-left transition-all duration-300 hover:scale-105 hover:shadow-2xl flex flex-col h-full ${snapshot.isDragging ? "opacity-70" : ""}`}
+                        className={`p-3 bg-white shadow-lg rounded-3xl text-left transition-all duration-300 hover:scale-105 hover:shadow-2xl flex flex-col h-full ${
+                          snapshot.isDragging ? "opacity-70" : ""
+                        }`}
                       >
                         <h3 className="text-xl font-bold mb-2">{card.title}</h3>
                         <p className="text-xl text-gray-600 flex-grow mb-4">{card.description}</p>
@@ -72,13 +74,25 @@ const Cards = ({
                     )}
                   </Draggable>
                 ))}
+                
                 {/* 只有在 `isDragDeleteEnabled` 为 true 时显示“新增”按钮 */}
                 {isDragDeleteEnabled && !isAdding && (
-                  <div onClick={() => setIsAdding(true)} className="p-3 bg-white shadow-lg rounded-3xl flex flex-col justify-center items-center cursor-pointer">
-                    <span className="text-2xl">➕</span>
-                    <p className="text-xl text-gray-600 mt-2">Add New Nav</p>
-                  </div>
+                  <Draggable key="add-button" draggableId="add-button" index={cards.length}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        onClick={() => setIsAdding(true)}
+                        className="p-3 bg-white shadow-lg rounded-3xl flex flex-col justify-center items-center cursor-pointer"
+                      >
+                        <span className="text-2xl">➕</span>
+                        <p className="text-xl text-gray-600 mt-2">Add New Nav</p>
+                      </div>
+                    )}
+                  </Draggable>
                 )}
+
                 {provided.placeholder}
               </div>
             )}
