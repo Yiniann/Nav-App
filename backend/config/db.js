@@ -1,9 +1,15 @@
+require('dotenv').config(); // 确保这行在最顶部
+
 const mysql = require('mysql2');
 
 const initPool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '12011201'
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD, 
+  port: parseInt(process.env.DB_PORT) || 3306,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 }).promise();
 
 const initDatabase = async () => {
@@ -11,26 +17,27 @@ const initDatabase = async () => {
     await initPool.query("CREATE DATABASE IF NOT EXISTS nav_app");
     console.log("✅ Database checked/created");
 
-    // 关闭初始连接池
     await initPool.end();
 
-    // 连接 `nav_app` 数据库
+    // 创建应用使用的连接池
     const pool = mysql.createPool({
-      host: 'localhost',
-      user: 'root',
-      password: '12011201',
-      database: 'nav_app'
+      host: process.env.DB_HOST || 'localhost',
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD,
+      database: 'nav_app',
+      port: parseInt(process.env.DB_PORT) || 3306,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0
     }).promise();
 
     console.log("✅ Connected to database: nav_app");
-
-    return pool; // **返回正确的 `pool`**
+    return pool;
   } catch (err) {
     console.error("❌ Database initialization error:", err);
     process.exit(1);
   }
 };
 
-// **确保 `poolPromise` 是一个 `Promise`**
 const poolPromise = initDatabase();
 module.exports = poolPromise;
