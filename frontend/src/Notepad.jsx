@@ -8,6 +8,7 @@ import formatDate from "./utils/formatDate";
 import { showToast } from "./stores/toastSlice"
 
 const Notepad = () => {
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const dispatch = useDispatch();
     const notes = useSelector((state) => state.notes.notes || []);
     console.log("Notes data:", notes);
@@ -30,6 +31,11 @@ const Notepad = () => {
     });
 
     const handleAddNote = async () => {
+        if (!isAuthenticated) {
+            dispatch(showToast("Please login to delete notes"));
+            return;
+          }
+
         if (!editor) return;
     
         const rawContent = editor.getHTML();
@@ -49,20 +55,33 @@ const Notepad = () => {
     };
     
     const handleUpdateNote = async (id, content) => {
-        const textContent = content.replace(/<[^>]*>/g, "").trim();
-    
+        if (!isAuthenticated) {
+            dispatch(showToast("Please login to edit notes"));
+            return;
+        }
+        const textContent = content.replace(/<[^>]*>/g, "").trim();  // 去除 HTML 标签，只保留文本内容
+        
         if (!textContent) {
             dispatch(showToast("Note content cannot be empty!")); 
             return;
         }
     
-        await dispatch(updateNote({ id, content }));
+        // 调试输出，确保正确传递内容
+        console.log("Updating note with id:", id, "content:", content);
+    
+        await dispatch(updateNote({ id, content }));  // 发送请求更新笔记
         dispatch(fetchNotes());
         setEditingNote(null);
-        dispatch(showToast("Note updated successfully!"))
+        dispatch(showToast("Note updated successfully!"));
     };
+    
 
     const handleDeleteNote = async (id) => {
+        if (!isAuthenticated) {
+            dispatch(showToast("Please login to delete notes"));
+            setShowMenu(null)
+            return;
+          }
         await dispatch(deleteNote(id));
         dispatch(fetchNotes());
         dispatch(showToast("Note deleted successfully!"));

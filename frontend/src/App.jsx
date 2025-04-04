@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import Home from "./Home";
 import Notepad from "./Notepad";
 import Manage from "./Manage";
+import Register from "./Register"
 import DarkModeToggle from "./components/DarkModeToggle";
 import Toast from "./components/Toast";
 
@@ -55,8 +56,10 @@ export default function App() {
 
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/Notepad" element={<Notepad />} />
+            <Route path="/Notepad"   element={<Notepad />} />
             <Route path="/manage" element={<Manage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Manage />} /> 
           </Routes>
         </div>
       </div>

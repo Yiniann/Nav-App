@@ -6,6 +6,7 @@ import Cards from "./components/Cards";
 import useField from "./hooks/useField";
 
 const Home = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const [isDragDeleteEnabled, setIsDragDeleteEnabled] = useState(false); 
   const darkMode = useSelector((state) => state.darkMode)
   const cards = useSelector((state) => state.cards || []);
@@ -22,6 +23,10 @@ const Home = () => {
   const buttonText = useField("text");
 
   const handleAddCard = async () => {
+    if (!isAuthenticated) {
+      dispatch(showToast("Please login to add cards"));
+      return;
+    }
     if (!title.fieldProps.value || !description.fieldProps.value || !url.fieldProps.value || !buttonText.fieldProps.value) {
       dispatch(showToast("Please enter all fields!"));
       return;
@@ -64,6 +69,10 @@ const Home = () => {
   };
 
   const handleDelete = (id) => {
+    if (!isAuthenticated) {
+      dispatch(showToast("Please login to delete cards"));
+      return;
+    }
     if (window.confirm("Are you sure you want to delete this card?")) {
       dispatch(removeCard(id))
         .unwrap() 
@@ -84,6 +93,10 @@ const Home = () => {
   };
 
   const toggleSort = () => {
+    if (!isAuthenticated) {
+      dispatch(showToast("Login in to Sort Cards"))
+      return;
+    }
     setIsDragDeleteEnabled(!isDragDeleteEnabled); 
   };
 
