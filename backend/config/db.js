@@ -1,4 +1,4 @@
-require('dotenv').config(); // 确保这行在最顶部
+require('dotenv').config();
 
 const mysql = require('mysql2');
 
@@ -19,7 +19,7 @@ const initDatabase = async () => {
 
     await initPool.end();
 
-    // 创建应用使用的连接池
+
     const pool = mysql.createPool({
       host: process.env.DB_HOST || 'localhost',
       user: process.env.DB_USER || 'root',
