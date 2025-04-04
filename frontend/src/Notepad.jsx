@@ -93,7 +93,7 @@ const Notepad = () => {
     
 
     return (
-        <div className="w-full max-w-2xl mx-auto mt-6 p-4 bg-gray-100 rounded-lg shadow-lg">
+        <div className="w-full  max-w-screen-lg mx-auto mt-6 p-4 bg-gray-100 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4 text-center">Notepad</h2>
 
             <div className="w-full bg-white p-2 rounded-md relative flex flex-col">
