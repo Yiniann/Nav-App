@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api";  // 使用你已经配置好的 api 实例
 
-const API_URL = "http://localhost:3001/notes";
+const API_URL = "/notes";
 
 export const fetchNotes = createAsyncThunk("notes/fetchNotes", async () => {
   try {

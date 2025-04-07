@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api";  // 引入已经配置拦截器的 api 实例
 
-const API_URL = "http://localhost:3001/cards";
+const API_URL = "/cards";
 
 // 获取卡片
 export const fetchCards = createAsyncThunk("cards/fetchCards", async () => {

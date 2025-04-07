@@ -2,12 +2,16 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const path = require('path');
+
+require('./utils/ensureEnv')(); // 确保 .env 文件存在
 
 const poolPromise = require('./config/db');
 const createCardsTable = require('./models/Cards');
 const createNotesTable = require('./models/Notes');
 const createUsersTable = require('./models/Users');
 
+app.use(express.static(path.join(__dirname, 'client/dist')))// 静态文件中间件
 // 中间件
 app.use(cors());
 app.use(express.json());
@@ -33,7 +37,11 @@ const authMiddleware = require('./middlewares/auth');
 
 // 使用路由
 app.use('/auth', authRoutes); 
-app.use('/cards', cardRoutes);  // 取消了 authMiddleware
-app.use('/notes', noteRoutes);   // 取消了 authMiddleware
+app.use('/cards', cardRoutes); 
+app.use('/notes', noteRoutes); 
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
+});
 
 module.exports = app;
