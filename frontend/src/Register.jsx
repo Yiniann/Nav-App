@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "./stores/toastSlice";
 import { register } from "./stores/authSlice";
 
@@ -29,7 +29,7 @@ const Register = () => {
       })).unwrap();
       
       dispatch(showToast("Registration successful! Please login."));
-      // 可以在这里重定向到登录页
+      useNavigate("/login");
     } catch (error) {
       dispatch(showToast(error.message || "Registration failed"));
     }
