@@ -1,23 +1,26 @@
-import { useSelector, useDispatch } from "react-redux"
-import { hideToast } from "../stores/toastSlice"
-import { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux";
+import { hideToast } from "../stores/toastSlice";
+import { useEffect } from "react";
 
 const Toast = () => {
   const { message, visible } = useSelector((state) => state.toast);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
-        dispatch(hideToast())
-      }, 3000);
+        dispatch(hideToast());
+      }, 3000); 
     }
-  }, [visible, dispatch])
+  }, [visible, dispatch]);
 
-  if (!visible) return null
+  if (!visible) return null;
 
   return (
-    <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded shadow-lg text-2xl">
+    <div
+      className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded shadow-lg text-2xl z-50 opacity-100 transition-opacity duration-300"
+      style={{ animation: "fadeIn 0.5s, fadeOut 0.5s 2.5s forwards" }}
+    >
       {message}
     </div>
   );
